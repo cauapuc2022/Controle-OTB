@@ -67,6 +67,12 @@ function render(){
     if(diretos.value !== "todos" && d.diretos != filtroDir) return;
     if(!d.cliente.toLowerCase().includes(termo)) return;
 
+    // 🔥 NOVO: respeita cliente selecionado no TOTAL
+    if(clienteAtual !== null && i !== clienteAtual){
+      filtrados.push({ ...d, index:i });
+      return;
+    }
+
     filtrados.push({ ...d, index:i });
 
     let tr = `<tr onclick="selectCliente(${i})">`;
@@ -87,7 +93,7 @@ function render(){
       let real = toNumber(m.real);
       let credito = toNumber(m.credito);
 
-      // 🔥 AJUSTE AQUI (SÓ SOMA SE FOR MAIOR QUE ZERO)
+      // 🔥 SOMA APENAS POSITIVOS E RESPEITANDO CLIENTE
       if(credito > 0){
         total += credito;
       }
