@@ -9,12 +9,17 @@ const app = express();
 // ================= CONFIG =================
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public")); // ✅ correto (apenas uma vez)
+app.use(express.static("public"));
 
 // ================= MONGO =================
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 .then(()=>console.log("✅ Conectado ao MongoDB"))
-.catch(err=>console.log("❌ Erro Mongo:", err));
+.catch(err=>{
+  console.error("❌ Erro Mongo REAL:", err);
+});
 
 // ================= MODEL =================
 const Cliente = mongoose.model("Cliente", new mongoose.Schema({
@@ -63,20 +68,27 @@ function num(v){
 app.get("/clientes", async (req,res)=>{
   try {
     const clientes = await Cliente.find();
-    res.json(clientes);
+
+    // 🔥 garante sempre array
+    res.json(clientes || []);
+
   } catch (err) {
-    res.status(500).json({ erro: "Erro ao buscar clientes" });
+    console.error("🔥 ERRO /clientes:", err);
+    res.status(500).json({ erro: err.message });
   }
 });
 
-// ================= SALVAR OBS (🔥 ESSENCIAL) =================
+// ================= SALVAR OBS =================
 app.post("/obs", async (req,res)=>{
   try {
-
     const { id, tipo, texto, data } = req.body;
 
     if(!id || !tipo || !texto || !data){
       return res.status(400).json({ erro: "Dados inválidos" });
+    }
+
+    if(!["marcelo","caua"].includes(tipo)){
+      return res.status(400).json({ erro: "Tipo inválido" });
     }
 
     const cliente = await Cliente.findById(id);
@@ -85,7 +97,6 @@ app.post("/obs", async (req,res)=>{
       return res.status(404).json({ erro: "Cliente não encontrado" });
     }
 
-    // 🔥 garante estrutura SEMPRE
     if(!cliente.obs){
       cliente.obs = { marcelo: [], caua: [] };
     }
@@ -93,7 +104,6 @@ app.post("/obs", async (req,res)=>{
     if(!cliente.obs.marcelo) cliente.obs.marcelo = [];
     if(!cliente.obs.caua) cliente.obs.caua = [];
 
-    // 🔥 salva corretamente
     cliente.obs[tipo].push({ texto, data });
 
     await cliente.save();
@@ -101,19 +111,17 @@ app.post("/obs", async (req,res)=>{
     res.json({ sucesso: true });
 
   } catch (err){
-    console.error("Erro ao salvar observação:", err);
-    res.status(500).json({ erro: "Erro ao salvar observação" });
+    console.error("🔥 ERRO /obs:", err);
+    res.status(500).json({ erro: err.message });
   }
 });
 
 // ================= UPDATE =================
 app.post("/update", async (req,res)=>{
   try {
-
     const {id, mesIndex, campo, valor} = req.body;
 
     const c = await Cliente.findById(id);
-
     if(!c) return res.status(404).send();
 
     c.meses[mesIndex][campo] = valor;
@@ -124,6 +132,7 @@ app.post("/update", async (req,res)=>{
     res.sendStatus(200);
 
   } catch (err){
+    console.error("🔥 ERRO /update:", err);
     res.status(500).send();
   }
 });
@@ -132,9 +141,7 @@ app.post("/update", async (req,res)=>{
 const upload = multer({ dest: "uploads/" });
 
 app.post("/upload", upload.single("file"), async (req,res)=>{
-
   try {
-
     console.log("📊 Importando Excel...");
 
     const wb = XLSX.readFile(req.file.path);
@@ -165,15 +172,14 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
     }
 
     console.log("✅ Excel importado com sucesso");
-
     res.json({msg:"Importado"});
 
   } catch (err){
-    console.error("Erro ao importar Excel:", err);
-    res.status(500).json({ erro: "Erro no upload" });
+    console.error("🔥 ERRO /upload:", err);
+    res.status(500).json({ erro: err.message });
   }
 });
 
 // ================= SERVER =================
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Rodando na porta ${PORT}`));
