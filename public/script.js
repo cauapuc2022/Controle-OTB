@@ -30,7 +30,6 @@ function render(){
   let filtroDir = diretos.value;
   let termo = search.value.toLowerCase();
 
-  // 🔥 ORDENAÇÃO ADICIONADA (MAIOR → MENOR CRÉDITO)
   dados.sort((a, b) => {
 
     if(filtroMes != "todos"){
@@ -88,7 +87,10 @@ function render(){
       let real = toNumber(m.real);
       let credito = toNumber(m.credito);
 
-      total += credito;
+      // 🔥 AJUSTE AQUI (SÓ SOMA SE FOR MAIOR QUE ZERO)
+      if(credito > 0){
+        total += credito;
+      }
 
       tr += `
       <td class="otb">${format(otb)}</td>
