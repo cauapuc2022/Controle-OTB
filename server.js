@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.static("public")); // ✅ correto (apenas uma vez)
 
 // ================= MONGO =================
-mongoose.connect("mongodb+srv://cauafernandesf95_db_user:Ca12345678@cluster0.kusyeje.mongodb.net/otb?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("✅ Conectado ao MongoDB"))
 .catch(err=>console.log("❌ Erro Mongo:", err));
 
@@ -175,4 +175,5 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
 });
 
 // ================= SERVER =================
-app.listen(3000, ()=>console.log("🚀 Servidor rodando em http://localhost:3000"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Rodando na porta ${PORT}`));
