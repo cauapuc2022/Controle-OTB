@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="top-bar">
+
+<div class="filtros">
+
+<div class="filtro-bloco">
+<label>Meses</label>
+<select id="mes"></select>
+</div>
+
+<div class="filtro-bloco">
+<label>Diretos</label>
+<select id="diretos">
+<option value="todos">Todos</option>
+<option value="Sim">Sim</option>
+<option value="Não">Não</option>
+</select>
+</div>
+
+<button onclick="carregar()">🔍</button>
+<button onclick="limpar()">Limpar</button>
+
+</div>
+
+<div class="excel-box">
+<input type="file" id="excel" hidden>
+<button onclick="excel.click()">📊</button>
+<button onclick="uploadExcel()">➤</button>
+</div>
+
+</div>
+
+<h2 id="totalCredito"></h2>
+
+<div id="graficoContainer">
+
+<div class="grafico-header">
+<div>
+<div id="graficoTitulo"></div>
+<div id="creditoInfo"></div>
+
+
+<canvas id="grafico"></canvas>
+
+</div>
+
+<input id="search" placeholder="Buscar cliente...">
+
+<table>
+<thead id="thead"></thead>
+<tbody id="tbody"></tbody>
+</table>
+
+<div id="loading">Importando dados...</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+
+    <h2 id="tituloModal"></h2>
+
+    <div class="obs-grid">
+
+      <div>
+        <h3>Marcelo</h3>
+        <div id="chatMarcelo" class="chat"></div>
+        <textarea id="inputMarcelo"></textarea>
+        <button class="btn-send" onclick="addObs('marcelo')">➤</button>
+      </div>
+
+      <div>
+        <h3>Cauã</h3>
+        <div id="chatCaua" class="chat"></div>
+        <textarea id="inputCaua"></textarea>
+        <button class="btn-send" onclick="addObs('caua')">➤</button>
+      </div>
+
+    </div>
+
+    <button onclick="fecharModal()">Fechar</button>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
