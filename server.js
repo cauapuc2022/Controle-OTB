@@ -68,10 +68,7 @@ function num(v){
 app.get("/clientes", async (req,res)=>{
   try {
     const clientes = await Cliente.find();
-
-    // 🔥 garante sempre array
     res.json(clientes || []);
-
   } catch (err) {
     console.error("🔥 ERRO /clientes:", err);
     res.status(500).json({ erro: err.message });
@@ -147,9 +144,12 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
     const wb = XLSX.readFile(req.file.path);
     const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
-    await Cliente.deleteMany();
+    // ❌ REMOVIDO → NÃO APAGA MAIS
+    // await Cliente.deleteMany();
 
     for (let row of data){
+
+      const nomeCliente = getValue(row,"Cliente");
 
       const meses = [
         { mes:"Jan", otb:num(getValue(row,"OTB Janeiro")), real:num(getValue(row,"Realizado Janeiro")) },
@@ -163,15 +163,28 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
         credito: m.otb - m.real
       }));
 
-      await Cliente.create({
-        cliente: getValue(row,"Cliente"),
-        diretos: normalize(getValue(row,"Diretos")) === "sim" ? "Sim" : "Não",
-        meses,
-        obs: { marcelo: [], caua: [] }
-      });
+      // 🔥 PROCURA CLIENTE EXISTENTE
+      let existente = await Cliente.findOne({ cliente: nomeCliente });
+
+      if(existente){
+        // 🔥 ATUALIZA SEM PERDER OBS
+        existente.diretos = normalize(getValue(row,"Diretos")) === "sim" ? "Sim" : "Não";
+        existente.meses = meses;
+
+        await existente.save();
+
+      } else {
+        // 🔥 CRIA NOVO CLIENTE
+        await Cliente.create({
+          cliente: nomeCliente,
+          diretos: normalize(getValue(row,"Diretos")) === "sim" ? "Sim" : "Não",
+          meses,
+          obs: { marcelo: [], caua: [] }
+        });
+      }
     }
 
-    console.log("✅ Excel importado com sucesso");
+    console.log("✅ Excel importado sem perder observações");
     res.json({msg:"Importado"});
 
   } catch (err){
