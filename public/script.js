@@ -65,7 +65,6 @@ function render(){
 
     let tr = `<tr onclick="selectCliente(${i})">`;
 
-    // 🔴 verifica se tem observação
     let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
 
     tr += `
@@ -109,7 +108,6 @@ function selectCliente(i){
 }
 
 function renderGrafico(lista){
-
   let filtroMes = Number(mes.value);
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
@@ -121,7 +119,6 @@ function renderGrafico(lista){
   let somaReal = 0;
 
   lista.forEach(d=>{
-
     if(clienteAtual !== null && d.index !== clienteAtual) return;
 
     let mData = d.meses[filtroMes];
@@ -156,14 +153,12 @@ function renderGrafico(lista){
 }
 
 function atualizarTitulo(){
-
   let filtroMes = Number(mes.value);
   let filtroDir = diretos.value;
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
   let partes = [];
-
   partes.push(meses[filtroMes]);
 
   if(filtroDir != "todos"){
@@ -180,7 +175,6 @@ function atualizarTitulo(){
 }
 
 async function uploadExcel(){
-
   let file = excel.files[0];
 
   if(!file){
@@ -238,7 +232,10 @@ function abrirObs(i){
     chatMarcelo.innerHTML += `
       <div class="msg left">
         <div>${o.texto}</div>
-        <small>${o.data}</small>
+        <small>
+          <span onclick="confirmDelete('${c._id}','marcelo','${o.data}')" style="cursor:pointer;margin-right:6px;">🗑</span>
+          ${o.data}
+        </small>
       </div>`;
   });
 
@@ -246,64 +243,61 @@ function abrirObs(i){
     chatCaua.innerHTML += `
       <div class="msg right">
         <div>${o.texto}</div>
-        <small>${o.data}</small>
+        <small>
+          <span onclick="confirmDelete('${c._id}','caua','${o.data}')" style="cursor:pointer;margin-right:6px;">🗑</span>
+          ${o.data}
+        </small>
       </div>`;
   });
 
   modal.style.display="block";
 }
 
-async function addObs(tipo){
+async function confirmDelete(id, tipo, data){
+  if(!confirm("Deseja excluir essa observação definitivamente?")) return;
 
+  const resp = await fetch("/delete-obs",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ id, tipo, data })
+  });
+
+  const result = await resp.json();
+
+  if(result.sucesso){
+    await carregar();
+    const novoIndex = dados.findIndex(d => d._id === id);
+    if(novoIndex !== -1) abrirObs(novoIndex);
+  } else {
+    alert("Erro ao excluir");
+  }
+}
+
+async function addObs(tipo){
   let input = tipo=="marcelo"?inputMarcelo:inputCaua;
   let texto = input.value.trim();
-
   if(!texto) return;
 
   let agora = new Date();
+  let data = agora.toLocaleDateString("pt-BR")+" "+
+             agora.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
 
-  let data = agora.toLocaleDateString("pt-BR") + " " +
-             agora.toLocaleTimeString("pt-BR", {
-               hour: "2-digit",
-               minute: "2-digit"
-             });
-
-  input.value = "";
+  input.value="";
 
   const cliente = dados[clienteAtual];
 
-  try {
+  const resp = await fetch("/obs",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ id:cliente._id, tipo, texto, data })
+  });
 
-    const resp = await fetch("/obs",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        id: cliente._id,
-        tipo,
-        texto,
-        data
-      })
-    });
+  const result = await resp.json();
 
-    const result = await resp.json();
-
-    if(!result || !result.sucesso){
-      throw new Error("Falha ao salvar");
-    }
-
+  if(result.sucesso){
     await carregar();
-
     const novoIndex = dados.findIndex(d => d._id === cliente._id);
-
-    if(novoIndex !== -1){
-      abrirObs(novoIndex);
-    } else {
-      alert("Erro ao recarregar cliente");
-    }
-
-  } catch (e) {
-    console.error("Erro ao salvar observação:", e);
-    alert("Erro ao salvar no banco");
+    if(novoIndex !== -1) abrirObs(novoIndex);
   }
 }
 

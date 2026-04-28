@@ -113,6 +113,39 @@ app.post("/obs", async (req,res)=>{
   }
 });
 
+// ================= DELETE OBS (🔥 NOVO) =================
+app.post("/delete-obs", async (req,res)=>{
+  try {
+
+    const { id, tipo, data } = req.body;
+
+    if(!id || !tipo || !data){
+      return res.json({ sucesso:false });
+    }
+
+    const cliente = await Cliente.findById(id);
+
+    if(!cliente){
+      return res.json({ sucesso:false });
+    }
+
+    if(!cliente.obs || !cliente.obs[tipo]){
+      return res.json({ sucesso:false });
+    }
+
+    // 🔥 remove observação pelo timestamp
+    cliente.obs[tipo] = cliente.obs[tipo].filter(o => o.data !== data);
+
+    await cliente.save();
+
+    res.json({ sucesso:true });
+
+  } catch(err){
+    console.error("🔥 ERRO delete-obs:", err);
+    res.json({ sucesso:false });
+  }
+});
+
 // ================= UPDATE =================
 app.post("/update", async (req,res)=>{
   try {
@@ -144,7 +177,7 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
     const wb = XLSX.readFile(req.file.path);
     const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
-    // ❌ REMOVIDO → NÃO APAGA MAIS
+    // ❌ NÃO APAGA MAIS
     // await Cliente.deleteMany();
 
     for (let row of data){
@@ -163,18 +196,14 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
         credito: m.otb - m.real
       }));
 
-      // 🔥 PROCURA CLIENTE EXISTENTE
       let existente = await Cliente.findOne({ cliente: nomeCliente });
 
       if(existente){
-        // 🔥 ATUALIZA SEM PERDER OBS
         existente.diretos = normalize(getValue(row,"Diretos")) === "sim" ? "Sim" : "Não";
         existente.meses = meses;
-
         await existente.save();
 
       } else {
-        // 🔥 CRIA NOVO CLIENTE
         await Cliente.create({
           cliente: nomeCliente,
           diretos: normalize(getValue(row,"Diretos")) === "sim" ? "Sim" : "Não",
