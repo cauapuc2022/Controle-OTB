@@ -163,10 +163,8 @@ tbody tr:hover{
 /* ===== ALERTA OBS (🔥 COLADO NO NOME) ===== */
 .obs-alert{
   color:#e60000;
-  font-size:13px;
+  font-size:12px;
   margin-left:2px;
-  position:relative;
-  top:-1px;
 }
 
 /* ===== LOADING ===== */
