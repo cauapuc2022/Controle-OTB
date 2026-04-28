@@ -69,11 +69,12 @@ function render(){
 
     tr += `
       <td class="cliente-cell">
-        ${d.cliente}
-        <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">
-          📁${temObs ? '<span class="obs-alert">❗</span>' : ''}
-        </span>
-      </td>
+        <span class="cliente-nome">${d.cliente}</span>
+
+         <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">
+         ${temObs ? '<span class="obs-alert">❗</span>' : ''}
+         📁</span>
+       </td>
       <td>${d.diretos}</td>
     `;
 

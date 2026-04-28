@@ -297,3 +297,11 @@ textarea:focus{
   margin-top:12px;
   width:100%;
 }
+.cliente-cell{
+  display:flex;
+  align-items:center;
+}
+
+.cliente-nome{
+  flex:1; /* 🔥 empurra o ícone pra direita */
+}
