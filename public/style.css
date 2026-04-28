@@ -281,3 +281,17 @@ textarea:focus{
   margin-top:12px;
   width:100%;
 }
+
+/* ===== ICONES CLIENTE ===== */
+.icons{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+/* ===== ALERTA OBS ===== */
+.obs-alert{
+  color:#e60000;
+  font-size:14px;
+  font-weight:bold;
+}

@@ -26,15 +26,13 @@ async function carregar(){
 
 function render(){
 
-  let filtroMes = Number(mes.value); // 🔥 garante número
+  let filtroMes = Number(mes.value);
   let filtroDir = diretos.value;
   let termo = search.value.toLowerCase();
 
   dados.sort((a, b) => {
-
     let creditoA = toNumber(a.meses[filtroMes]?.credito);
     let creditoB = toNumber(b.meses[filtroMes]?.credito);
-
     return creditoB - creditoA;
   });
 
@@ -67,10 +65,14 @@ function render(){
 
     let tr = `<tr onclick="selectCliente(${i})">`;
 
+    // 🔴 NOVA REGRA: verifica se tem observação
+    let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
+
     tr += `
       <td class="cliente-cell">
         ${d.cliente}
         <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">📁</span>
+        ${temObs ? '<span class="obs-alert">❗</span>' : ''}
       </td>
       <td>${d.diretos}</td>
     `;
@@ -203,24 +205,22 @@ function limpar(){
   diretos.value = "todos";
   search.value = "";
   clienteAtual = null;
-  setMesAtual(); // 🔥 mantém mês atual
+  setMesAtual();
   carregar();
 }
 
-/* 🔥 DEFINE MÊS ATUAL AUTOMATICAMENTE */
 function setMesAtual(){
-  const hoje = new Date().getMonth(); // 0-11
-  const mesIndex = hoje <= 5 ? hoje : 5; // limita até Jun
+  const hoje = new Date().getMonth();
+  const mesIndex = hoje <= 5 ? hoje : 5;
   mes.value = mesIndex;
 }
 
-/* 🔥 REMOVE "TODOS" */
 mes.innerHTML =
 [0,1,2,3,4,5].map(i =>
 `<option value="${i}">${["Jan","Fev","Mar","Abr","Mai","Jun"][i]}</option>`
 ).join('');
 
-setMesAtual(); // 🔥 já inicia no mês atual
+setMesAtual();
 
 search.addEventListener("keyup", render);
 
