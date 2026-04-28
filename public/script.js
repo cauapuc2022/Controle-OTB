@@ -26,22 +26,16 @@ async function carregar(){
 
 function render(){
 
-  let filtroMes = mes.value;
+  let filtroMes = Number(mes.value); // 🔥 garante número
   let filtroDir = diretos.value;
   let termo = search.value.toLowerCase();
 
   dados.sort((a, b) => {
 
-    if(filtroMes != "todos"){
-      let creditoA = toNumber(a.meses[filtroMes]?.credito);
-      let creditoB = toNumber(b.meses[filtroMes]?.credito);
-      return creditoB - creditoA;
-    }
+    let creditoA = toNumber(a.meses[filtroMes]?.credito);
+    let creditoB = toNumber(b.meses[filtroMes]?.credito);
 
-    let totalA = a.meses.reduce((s, m) => s + toNumber(m.credito), 0);
-    let totalB = b.meses.reduce((s, m) => s + toNumber(m.credito), 0);
-
-    return totalB - totalA;
+    return creditoB - creditoA;
   });
 
   thead.innerHTML = "";
@@ -49,15 +43,12 @@ function render(){
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
-  let head = "<tr><th>Cliente</th><th>Diretos</th>";
+  let head = `<tr><th>Cliente</th><th>Diretos</th>
+  <th>${meses[filtroMes]} OTB</th>
+  <th>${meses[filtroMes]} Real</th>
+  <th>Crédito</th></tr>`;
 
-  meses.forEach((m,i)=>{
-    if(filtroMes=="todos" || filtroMes==i){
-      head += `<th>${m} OTB</th><th>${m} Real</th><th>Crédito</th>`;
-    }
-  });
-
-  thead.innerHTML = head + "</tr>";
+  thead.innerHTML = head;
 
   let total = 0;
   let filtrados = [];
@@ -67,7 +58,6 @@ function render(){
     if(diretos.value !== "todos" && d.diretos != filtroDir) return;
     if(!d.cliente.toLowerCase().includes(termo)) return;
 
-    // 🔥 NOVO: respeita cliente selecionado no TOTAL
     if(clienteAtual !== null && i !== clienteAtual){
       filtrados.push({ ...d, index:i });
       return;
@@ -85,25 +75,21 @@ function render(){
       <td>${d.diretos}</td>
     `;
 
-    d.meses.forEach((m,index)=>{
+    let m = d.meses[filtroMes];
 
-      if(filtroMes!="todos" && filtroMes!=index) return;
+    let otb = toNumber(m?.otb);
+    let real = toNumber(m?.real);
+    let credito = toNumber(m?.credito);
 
-      let otb = toNumber(m.otb);
-      let real = toNumber(m.real);
-      let credito = toNumber(m.credito);
+    if(credito > 0){
+      total += credito;
+    }
 
-      // 🔥 SOMA APENAS POSITIVOS E RESPEITANDO CLIENTE
-      if(credito > 0){
-        total += credito;
-      }
-
-      tr += `
+    tr += `
       <td class="otb">${format(otb)}</td>
       <td class="real">${format(real)}</td>
       <td class="credito">${credito < 0 ? "Crédito já utilizado" : format(credito)}</td>
-      `;
-    });
+    `;
 
     tr += "</tr>";
     tbody.innerHTML += tr;
@@ -121,35 +107,30 @@ function selectCliente(i){
 
 function renderGrafico(lista){
 
-  let filtroMes = mes.value;
+  let filtroMes = Number(mes.value);
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
   let labels = [];
   let otb = [];
   let real = [];
 
-  meses.forEach((m,i)=>{
+  let somaOtb = 0;
+  let somaReal = 0;
 
-    if(filtroMes!="todos" && filtroMes!=i) return;
+  lista.forEach(d=>{
 
-    let somaOtb = 0;
-    let somaReal = 0;
+    if(clienteAtual !== null && d.index !== clienteAtual) return;
 
-    lista.forEach(d=>{
+    let mData = d.meses[filtroMes];
+    if(!mData) return;
 
-      if(clienteAtual !== null && d.index !== clienteAtual) return;
-
-      let mData = d.meses[i];
-      if(!mData) return;
-
-      somaOtb += toNumber(mData.otb);
-      somaReal += toNumber(mData.real);
-    });
-
-    labels.push(m);
-    otb.push(somaOtb);
-    real.push(somaReal);
+    somaOtb += toNumber(mData.otb);
+    somaReal += toNumber(mData.real);
   });
+
+  labels.push(meses[filtroMes]);
+  otb.push(somaOtb);
+  real.push(somaReal);
 
   if(chart) chart.destroy();
 
@@ -173,16 +154,14 @@ function renderGrafico(lista){
 
 function atualizarTitulo(){
 
-  let filtroMes = mes.value;
+  let filtroMes = Number(mes.value);
   let filtroDir = diretos.value;
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
   let partes = [];
 
-  if(filtroMes != "todos"){
-    partes.push(meses[filtroMes]);
-  }
+  partes.push(meses[filtroMes]);
 
   if(filtroDir != "todos"){
     partes.push("Diretos: " + filtroDir);
@@ -194,7 +173,7 @@ function atualizarTitulo(){
     titulo = dados[clienteAtual].cliente + " - " + titulo;
   }
 
-  graficoTitulo.innerText = titulo || "Todos os dados";
+  graficoTitulo.innerText = titulo;
 }
 
 async function uploadExcel(){
@@ -221,18 +200,27 @@ async function uploadExcel(){
 }
 
 function limpar(){
-  mes.value = "todos";
   diretos.value = "todos";
   search.value = "";
   clienteAtual = null;
+  setMesAtual(); // 🔥 mantém mês atual
   carregar();
 }
 
+/* 🔥 DEFINE MÊS ATUAL AUTOMATICAMENTE */
+function setMesAtual(){
+  const hoje = new Date().getMonth(); // 0-11
+  const mesIndex = hoje <= 5 ? hoje : 5; // limita até Jun
+  mes.value = mesIndex;
+}
+
+/* 🔥 REMOVE "TODOS" */
 mes.innerHTML =
-'<option value="todos">Todos</option>' +
 [0,1,2,3,4,5].map(i =>
 `<option value="${i}">${["Jan","Fev","Mar","Abr","Mai","Jun"][i]}</option>`
 ).join('');
+
+setMesAtual(); // 🔥 já inicia no mês atual
 
 search.addEventListener("keyup", render);
 
