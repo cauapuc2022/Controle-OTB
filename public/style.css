@@ -293,5 +293,5 @@ textarea:focus{
 .obs-alert{
   color:#e60000;
   font-size:13px;
-  margin:0 4px;
+  margin-left:2px; /* 🔥 mínimo espaço */
 }
