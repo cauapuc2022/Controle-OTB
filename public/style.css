@@ -233,13 +233,15 @@ tbody tr:hover{
 /* ===== MENSAGENS (🔥 CORRIGIDO) ===== */
 .msg{
   max-width:55%;
+  width:fit-content;           /* 🔥 ESSENCIAL */
   padding:4px 6px;
   border-radius:6px;
   font-size:12px;
   line-height:1.2;
 
-  word-break: break-word;     /* 🔥 CORREÇÃO QUEBRA */
-  white-space: pre-wrap;      /* 🔥 CORREÇÃO QUEBRA */
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .msg.left{
@@ -259,10 +261,9 @@ tbody tr:hover{
   margin-top:2px;
 
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  gap:8px; /* 🔥 controla espaço entre data e excluir */
 }
-
 /* hover no excluir */
 .msg small span:last-child:hover{
   opacity:0.7;
