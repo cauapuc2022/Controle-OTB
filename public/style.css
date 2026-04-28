@@ -50,7 +50,7 @@ select{
   min-width:110px;
 }
 
-/* ===== BOTÕES PADRÃO ===== */
+/* ===== BOTÕES ===== */
 button{
   background:#3D3D3D;
   color:#fff;
@@ -139,20 +139,19 @@ tbody tr:hover{
 .real{background:#e9f9e9;}
 .credito{background:#fff6d6;}
 
-/* ===== CLIENTE (🔥 AJUSTADO) ===== */
+/* ===== CLIENTE ===== */
 .cliente-cell{
   display:flex;
   align-items:center;
 }
 
-/* ===== ÍCONE PASTA (🔥 ALINHADO DIREITA) ===== */
+/* ===== ÍCONE PASTA ===== */
 .eye-icon{
   cursor:pointer;
   font-size:14px;
   padding:4px 6px;
   border-radius:4px;
   transition:0.2s;
-  margin-left:auto;
 }
 
 .eye-icon:hover{
@@ -160,11 +159,11 @@ tbody tr:hover{
   color:#fff;
 }
 
-/* ===== ALERTA OBS (🔥 COLADO NO NOME) ===== */
+/* ===== ALERTA OBS (🔥 CORRIGIDO) ===== */
 .obs-alert{
   color:#e60000;
   font-size:12px;
-  margin-left:2px;
+  margin-right:2px; /* 🔥 ANTES DA PASTA */
 }
 
 /* ===== LOADING ===== */
