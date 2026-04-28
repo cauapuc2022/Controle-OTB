@@ -65,14 +65,14 @@ function render(){
 
     let tr = `<tr onclick="selectCliente(${i})">`;
 
-    // 🔴 NOVA REGRA: verifica se tem observação
+    // 🔴 VERIFICA OBS
     let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
 
     tr += `
       <td class="cliente-cell">
         ${d.cliente}
-        <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">📁</span>
         ${temObs ? '<span class="obs-alert">❗</span>' : ''}
+        <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">📁</span>
       </td>
       <td>${d.diretos}</td>
     `;
