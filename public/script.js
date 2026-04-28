@@ -232,9 +232,11 @@ function abrirObs(i){
     chatMarcelo.innerHTML += `
       <div class="msg left">
         <div>${o.texto}</div>
-        <small>
-          <span onclick="confirmDelete('${c._id}','marcelo','${o.data}')" style="cursor:pointer;margin-right:6px;">🗑</span>
-          ${o.data}
+         <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">           <span>${o.data}</span>
+          <span onclick="confirmDelete('${c._id}','marcelo','${o.data}')" 
+                style="color:red; cursor:pointer; margin-left:10px;">
+            Excluir
+          </span>
         </small>
       </div>`;
   });
@@ -243,9 +245,12 @@ function abrirObs(i){
     chatCaua.innerHTML += `
       <div class="msg right">
         <div>${o.texto}</div>
-        <small>
-          <span onclick="confirmDelete('${c._id}','caua','${o.data}')" style="cursor:pointer;margin-right:6px;">🗑</span>
-          ${o.data}
+        <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <span>${o.data}</span>
+          <span onclick="confirmDelete('${c._id}','caua','${o.data}')" 
+                style="color:red; cursor:pointer; margin-left:10px;">
+            Excluir
+          </span>
         </small>
       </div>`;
   });
