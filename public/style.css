@@ -121,8 +121,7 @@ thead tr:hover{
 
 th, td{
   padding:10px;
-  text-align:center;
-  font-size:13px;
+  text-align:left; /* 🔥 resolve alinhamento */
 }
 
 td{
