@@ -233,7 +233,8 @@ tbody tr:hover{
 /* ===== MENSAGENS (🔥 CORRIGIDO) ===== */
 .msg{
   max-width:55%;
-  width:fit-content;           /* 🔥 ESSENCIAL */
+  width:fit-content;
+  display:inline-block;   /* 🔥 ESSENCIAL */
   padding:4px 6px;
   border-radius:6px;
   font-size:12px;
@@ -296,10 +297,6 @@ textarea:focus{
 .modal-content button:last-child{
   margin-top:12px;
   width:100%;
-}
-.cliente-cell{
-  display:flex;
-  align-items:center;
 }
 
 .cliente-nome{
