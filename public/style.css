@@ -302,3 +302,20 @@ textarea:focus{
 .cliente-nome{
   flex:1; /* 🔥 empurra o ícone pra direita */
 }
+
+/* ===== FILTRO OBS CABEÇALHO ===== */
+.filtro-obs-btn{
+  margin-left:8px;
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:6px;
+  background:#3D3D3D;
+  color:#fff;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.filtro-obs-btn.ativo{
+  background:#e60000;
+  color:#fff;
+}

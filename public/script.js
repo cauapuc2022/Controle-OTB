@@ -2,6 +2,14 @@ let dados = [];
 let chart = null;
 let clienteAtual = null;
 
+/* 🔥 NOVO FILTRO */
+let filtroObsAtivo = false;
+
+function toggleFiltroObs(){
+  filtroObsAtivo = !filtroObsAtivo;
+  render();
+}
+
 function toNumber(v){
   if(v === null || v === undefined || v === "") return 0;
   return Number(v);
@@ -41,8 +49,12 @@ function render(){
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
+  /* 🔥 HEADER COM BOTÃO */
   let head = `<tr>
-    <th>Cliente</th>
+    <th>
+      Cliente
+      <span class="filtro-obs-btn ${filtroObsAtivo ? 'ativo' : ''}" onclick="toggleFiltroObs()">❗</span>
+    </th>
     <th>Diretos</th>
     <th>Realizado M-1</th>
     <th>Crédito OTB M-1</th>
@@ -61,6 +73,11 @@ function render(){
     if(diretos.value !== "todos" && d.diretos != filtroDir) return;
     if(!d.cliente.toLowerCase().includes(termo)) return;
 
+    let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
+
+    /* 🔥 FILTRO */
+    if(filtroObsAtivo && !temObs) return;
+
     if(clienteAtual !== null && i !== clienteAtual){
       filtrados.push({ ...d, index:i });
       return;
@@ -69,8 +86,6 @@ function render(){
     filtrados.push({ ...d, index:i });
 
     let tr = `<tr onclick="selectCliente(${i})">`;
-
-    let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
 
     tr += `
       <td class="cliente-cell">
@@ -89,7 +104,7 @@ function render(){
     let real = toNumber(m?.real);
     let credito = toNumber(m?.credito);
 
-    // 🔥 MÊS ANTERIOR
+    // MÊS ANTERIOR
     let mesAnterior = filtroMes - 1;
     let mAnt = mesAnterior >= 0 ? d.meses[mesAnterior] : null;
 
@@ -215,6 +230,7 @@ function limpar(){
   diretos.value = "todos";
   search.value = "";
   clienteAtual = null;
+  filtroObsAtivo = false; // 🔥 limpa o filtro também
   setMesAtual();
   carregar();
 }
@@ -247,7 +263,8 @@ function abrirObs(i){
     chatMarcelo.innerHTML += `
       <div class="msg left">
         <div>${o.texto}</div>
-         <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">           <span>${o.data}</span>
+         <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <span>${o.data}</span>
           <span onclick="confirmDelete('${c._id}','marcelo','${o.data}')" 
                 style="color:red; cursor:pointer; margin-left:10px;">
             Excluir
