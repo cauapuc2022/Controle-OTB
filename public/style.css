@@ -309,8 +309,8 @@ textarea:focus{
   font-size:12px;
   padding:4px 8px;
   border-radius:6px;
-  background:#3D3D3D;
-  color:#fff;
+  background:#fff;
+  color:#e60000;
   cursor:pointer;
   transition:0.2s;
 }
