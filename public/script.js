@@ -41,10 +41,15 @@ function render(){
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
-  let head = `<tr><th>Cliente</th><th>Diretos</th>
-  <th>${meses[filtroMes]} OTB</th>
-  <th>${meses[filtroMes]} Real</th>
-  <th>Crédito</th></tr>`;
+  let head = `<tr>
+    <th>Cliente</th>
+    <th>Diretos</th>
+    <th>Realizado M-1</th>
+    <th>Crédito OTB M-1</th>
+    <th>${meses[filtroMes]} OTB</th>
+    <th>${meses[filtroMes]} Real</th>
+    <th>Crédito</th>
+  </tr>`;
 
   thead.innerHTML = head;
 
@@ -84,11 +89,20 @@ function render(){
     let real = toNumber(m?.real);
     let credito = toNumber(m?.credito);
 
+    // 🔥 MÊS ANTERIOR
+    let mesAnterior = filtroMes - 1;
+    let mAnt = mesAnterior >= 0 ? d.meses[mesAnterior] : null;
+
+    let realAnterior = toNumber(mAnt?.real);
+    let creditoAnterior = toNumber(mAnt?.credito);
+
     if(credito > 0){
       total += credito;
     }
 
     tr += `
+      <td class="real">${format(realAnterior)}</td>
+      <td class="credito">${format(creditoAnterior)}</td>
       <td class="otb">${format(otb)}</td>
       <td class="real">${format(real)}</td>
       <td class="credito">${credito < 0 ? "Crédito já utilizado" : format(credito)}</td>
