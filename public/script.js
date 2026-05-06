@@ -49,6 +49,11 @@ function render(){
 
   let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
 
+  // 🔥 NOVO - NOME DO MÊS ANTERIOR
+  let nomeMesAnterior = filtroMes > 0 
+    ? meses[filtroMes - 1] 
+    : "-";
+
   /* 🔥 HEADER COM BOTÃO */
   let head = `<tr>
     <th>
@@ -56,8 +61,8 @@ function render(){
       <span class="filtro-obs-btn ${filtroObsAtivo ? 'ativo' : ''}" onclick="toggleFiltroObs()">❗</span>
     </th>
     <th>Diretos</th>
-    <th>Realizado M-1</th>
-    <th>Crédito OTB M-1</th>
+    <th>Realizado ${nomeMesAnterior}</th>
+    <th>Crédito OTB ${nomeMesAnterior}</th>
     <th>${meses[filtroMes]} OTB</th>
     <th>${meses[filtroMes]} Real</th>
     <th>Crédito</th>
