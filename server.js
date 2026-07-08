@@ -185,16 +185,40 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
       const nomeCliente = getValue(row,"Cliente");
 
       const meses = [
-        { mes:"Jan", otb:num(getValue(row,"OTB Janeiro")), real:num(getValue(row,"Realizado Janeiro")) },
-        { mes:"Fev", otb:num(getValue(row,"OTB Fevereiro")), real:num(getValue(row,"Realizado Fevereiro")) },
-        { mes:"Mar", otb:num(getValue(row,"OTB Março")), real:num(getValue(row,"Realizado Março")) },
-        { mes:"Abr", otb:num(getValue(row,"OTB Abril")), real:num(getValue(row,"Realizado Abril")) },
-        { mes:"Mai", otb:num(getValue(row,"OTB Maio")), real:num(getValue(row,"Realizado Maio")) },
-        { mes:"Jun", otb:num(getValue(row,"OTB Junho")), real:num(getValue(row,"Realizado Junho")) }
-      ].map(m => ({
-        ...m,
-        credito: m.otb - m.real
-      }));
+  {
+    mes: "Jul",
+    otb: num(getValue(row, "OTB Julho")),
+    real: num(getValue(row, "Realizado Julho"))
+  },
+  {
+    mes: "Ago",
+    otb: num(getValue(row, "OTB Agosto")),
+    real: num(getValue(row, "Realizado Agosto"))
+  },
+  {
+    mes: "Set",
+    otb: num(getValue(row, "OTB Setembro")),
+    real: num(getValue(row, "Realizado Setembro"))
+  },
+  {
+    mes: "Out",
+    otb: num(getValue(row, "OTB Outubro")),
+    real: num(getValue(row, "Realizado Outubro"))
+  },
+  {
+    mes: "Nov",
+    otb: num(getValue(row, "OTB Novembro")),
+    real: num(getValue(row, "Realizado Novembro"))
+  },
+  {
+    mes: "Dez",
+    otb: num(getValue(row, "OTB Dezembro")),
+    real: num(getValue(row, "Realizado Dezembro"))
+  }
+].map(m => ({
+  ...m,
+  credito: m.otb - m.real
+}));
 
       let existente = await Cliente.findOne({ cliente: nomeCliente });
 
