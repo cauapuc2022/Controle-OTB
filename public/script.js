@@ -47,7 +47,7 @@ function render(){
   thead.innerHTML = "";
   tbody.innerHTML = "";
 
-  let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
+  let meses = ["Jul","Ago","Set","Out","Nov","Dez"];
 
   // 🔥 NOVO - NOME DO MÊS ANTERIOR
   let nomeMesAnterior = filtroMes > 0 
@@ -144,8 +144,7 @@ function selectCliente(i){
 
 function renderGrafico(lista){
   let filtroMes = Number(mes.value);
-  let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
-
+  let meses = ["Jul","Ago","Set","Out","Nov","Dez"];
   let labels = [];
   let otb = [];
   let real = [];
@@ -191,8 +190,7 @@ function atualizarTitulo(){
   let filtroMes = Number(mes.value);
   let filtroDir = diretos.value;
 
-  let meses = ["Jan","Fev","Mar","Abr","Mai","Jun"];
-
+  let meses = ["Jul","Ago","Set","Out","Nov","Dez"];
   let partes = [];
   partes.push(meses[filtroMes]);
 
@@ -241,14 +239,25 @@ function limpar(){
 }
 
 function setMesAtual(){
-  const hoje = new Date().getMonth();
-  const mesIndex = hoje <= 5 ? hoje : 5;
-  mes.value = mesIndex;
-}
 
+  const hoje = new Date().getMonth(); // Janeiro = 0
+
+  let mesIndex = 0;
+
+  if(hoje >= 6 && hoje <= 11){
+    // Julho até Dezembro
+    mesIndex = hoje - 6;
+  }else{
+    // Fora do semestre deixa Julho selecionado
+    mesIndex = 0;
+  }
+
+  mes.value = mesIndex;
+
+}
 mes.innerHTML =
 [0,1,2,3,4,5].map(i =>
-`<option value="${i}">${["Jan","Fev","Mar","Abr","Mai","Jun"][i]}</option>`
+`<option value="${i}">${["Jul","Ago","Set","Out","Nov","Dez"][i]}</option>`
 ).join('');
 
 setMesAtual();
