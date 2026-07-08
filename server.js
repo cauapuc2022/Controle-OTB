@@ -225,3 +225,12 @@ app.post("/upload", upload.single("file"), async (req,res)=>{
 // ================= SERVER =================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Rodando na porta ${PORT}`));
+
+app.get("/reset", async (req, res) => {
+  try {
+    const resultado = await Cliente.deleteMany({});
+    res.send(`Banco zerado! ${resultado.deletedCount} clientes removidos.`);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
