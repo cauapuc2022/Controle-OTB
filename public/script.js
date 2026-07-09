@@ -147,7 +147,8 @@ if (ultimaMarcelo && ultimaCaua){
         <span class="cliente-nome">${d.cliente}</span>
 
          <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">
-         ${temObs ? `<span class="obs-alert ${ultimaPessoa}" style="font-size:18px;">${ultimaPessoa}</span>` : ''}
+         ${temObs ? `<span class="obs-alert ${ultimaPessoa}"></span>` : ''}
+
          📁</span>
        </td>
       <td>${d.diretos}</td>
