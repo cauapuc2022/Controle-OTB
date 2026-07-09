@@ -330,7 +330,7 @@ function abrirObs(i){
         <div>${o.texto}</div>
          <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
           <span>${o.data}</span>
-          <span onclick="confirmDelete('${c._id}','marcelo','${o.data}')" 
+          <span onclick="confirmDelete('${c._id}','marcelo','${o.id}')" 
                 style="color:red; cursor:pointer; margin-left:10px;">
             Excluir
           </span>
@@ -344,7 +344,7 @@ function abrirObs(i){
         <div>${o.texto}</div>
         <small style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
           <span>${o.data}</span>
-          <span onclick="confirmDelete('${c._id}','caua','${o.data}')" 
+          <span onclick="confirmDelete('${c._id}','caua','${o.id}')" 
                 style="color:red; cursor:pointer; margin-left:10px;">
             Excluir
           </span>
@@ -355,13 +355,17 @@ function abrirObs(i){
   modal.style.display="block";
 }
 
-async function confirmDelete(id, tipo, data){
+async function confirmDelete(id, tipo, obsId){
   if(!confirm("Deseja excluir essa observação definitivamente?")) return;
 
   const resp = await fetch("/delete-obs",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({ id, tipo, data })
+    body: JSON.stringify({
+    id,
+    tipo,
+    obsId
+})
   });
 
   const result = await resp.json();
