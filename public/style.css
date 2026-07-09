@@ -243,39 +243,54 @@ tbody tr:hover{
 }
 
 /* ===== MENSAGENS (🔥 CORRIGIDO) ===== */
+/* ===== MENSAGENS ===== */
 .msg{
-    max-width:55%;
-    width:fit-content;
+    max-width:75%;
+    width:auto;
     display:inline-block;
-    padding:6px 8px;
-    border-radius:6px;
-    font-size:12px;
-    line-height:1.4;
 
-    white-space: pre-wrap;
-    word-break: break-word;   /* ou normal */
-    overflow-wrap: break-word;
+    padding:3px 5px;      /* espaço interno do balão */
+    border-radius:6px;
+
+    font-size:12px;
+    line-height:1.25;
+
+    white-space:pre-wrap;
+    word-break:normal;
+    overflow-wrap:break-word;
+}
+
+.msg div{
+    margin:0;
+    padding:0;
 }
 
 .msg.left{
-  background:#f1f1f1;
-  align-self:flex-start;
+    background:#f1f1f1;
+    align-self:flex-start;
 }
 
 .msg.right{
-  background:#e6f4ea;
-  align-self:flex-end;
+    background:#e6f4ea;
+    align-self:flex-end;
 }
 
-/* ===== DATA + EXCLUIR (🔥 CORRIGIDO) ===== */
+/* ===== DATA ===== */
 .msg small{
-  font-size:9px;
-  color:#777;
-  margin-top:2px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-  display:flex;
-  align-items:center;
-  gap:8px; /* 🔥 controla espaço entre data e excluir */
+    margin-top:2px;
+    padding:0;
+
+    font-size:9px;
+    color:#777;
+    gap:8px;
+}
+
+.msg small span:last-child:hover{
+    opacity:.7;
 }
 /* hover no excluir */
 .msg small span:last-child:hover{
