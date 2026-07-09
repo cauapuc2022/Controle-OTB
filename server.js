@@ -101,8 +101,11 @@ app.post("/obs", async (req,res)=>{
     if(!cliente.obs.marcelo) cliente.obs.marcelo = [];
     if(!cliente.obs.caua) cliente.obs.caua = [];
 
-    cliente.obs[tipo].push({ texto, data });
-
+    cliente.obs[tipo].push({
+    id: new mongoose.Types.ObjectId().toString(),
+    texto,
+    data
+});
     await cliente.save();
 
     res.json({ sucesso: true });
@@ -117,12 +120,11 @@ app.post("/obs", async (req,res)=>{
 app.post("/delete-obs", async (req,res)=>{
   try {
 
-    const { id, tipo, data } = req.body;
+     const { id, tipo, obsId } = req.body;
 
-    if(!id || !tipo || !data){
-      return res.json({ sucesso:false });
-    }
-
+if(!id || !tipo || !obsId){
+  return res.json({ sucesso:false });
+}
     const cliente = await Cliente.findById(id);
 
     if(!cliente){
@@ -134,7 +136,8 @@ app.post("/delete-obs", async (req,res)=>{
     }
 
     // 🔥 remove observação pelo timestamp
-    cliente.obs[tipo] = cliente.obs[tipo].filter(o => o.data !== data);
+     cliente.obs[tipo] =
+    cliente.obs[tipo].filter(o => o.id !== obsId);
 
     await cliente.save();
 
