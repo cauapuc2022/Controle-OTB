@@ -83,6 +83,11 @@ function render(){
     // Descobre quem fez a última observação
 let ultimaPessoa = "";
 
+console.log("================================");
+console.log("Cliente:", d.cliente);
+console.log("Obs Marcelo:", d.obs?.marcelo);
+console.log("Obs Cauã:", d.obs?.caua);
+
 let ultimaMarcelo = d.obs?.marcelo?.length
     ? d.obs.marcelo[d.obs.marcelo.length - 1]
     : null;
@@ -104,6 +109,7 @@ if (ultimaMarcelo && ultimaCaua){
 
     let dataMarcelo = ultimaMarcelo.data;
     let dataCaua = ultimaCaua.data;
+    
 
     let dm = dataMarcelo.split(" ");
     let dc = dataCaua.split(" ");
@@ -117,6 +123,7 @@ if (ultimaMarcelo && ultimaCaua){
         dc[1].replace(":","");
 
     ultimaPessoa = valorMarcelo > valorCaua ? "marcelo" : "caua";
+    console.log("Última pessoa:", ultimaPessoa);
 }
     /* 🔥 FILTRO */
     if(filtroObsAtivo && !temObs) return;
