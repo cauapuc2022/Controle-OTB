@@ -123,6 +123,7 @@ if (ultimaMarcelo && ultimaCaua){
         dc[1].replace(":","");
 
     ultimaPessoa = valorMarcelo > valorCaua ? "marcelo" : "caua";
+    console.log("Classe aplicada:", `obs-alert ${ultimaPessoa}`);
       console.log("Cliente:", d.cliente);
       console.log("Último Marcelo:", ultimaMarcelo);
       console.log("Último Cauã:", ultimaCaua);
@@ -146,7 +147,7 @@ if (ultimaMarcelo && ultimaCaua){
         <span class="cliente-nome">${d.cliente}</span>
 
          <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">
-         ${temObs ? `<span class="obs-alert ${ultimaPessoa}">❗</span>` : ''}
+         ${temObs ? `<span class="obs-alert ${ultimaPessoa}" style="font-size:18px;">${ultimaPessoa}</span>` : ''}
          📁</span>
        </td>
       <td>${d.diretos}</td>
