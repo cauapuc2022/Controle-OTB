@@ -244,17 +244,17 @@ tbody tr:hover{
 
 /* ===== MENSAGENS (🔥 CORRIGIDO) ===== */
 .msg{
-  max-width:55%;
-  width:fit-content;
-  display:inline-block;   /* 🔥 ESSENCIAL */
-  padding:4px 6px;
-  border-radius:6px;
-  font-size:12px;
-  line-height:1.2;
+    max-width:55%;
+    width:fit-content;
+    display:inline-block;
+    padding:6px 8px;
+    border-radius:6px;
+    font-size:12px;
+    line-height:1.4;
 
-  word-break: break-all;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
+    white-space: pre-wrap;
+    word-break: break-word;   /* ou normal */
+    overflow-wrap: break-word;
 }
 
 .msg.left{
