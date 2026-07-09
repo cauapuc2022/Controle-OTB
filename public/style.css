@@ -161,17 +161,23 @@ tbody tr:hover{
 }
 
 /* ===== ALERTA OBS ===== */
+/* ===== INDICADOR DA ÚLTIMA OBSERVAÇÃO ===== */
+
 .obs-alert{
-  font-size:12px;
-  margin-right:4px;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+    flex-shrink:0;
 }
 
 .obs-alert.marcelo{
-    color:#ff6600;
+    background:#ff6600;
 }
 
 .obs-alert.caua{
-    color:#0066ff;
+    background:#0066ff;
 }
 /* ===== LOADING ===== */
 #loading{
