@@ -162,11 +162,17 @@ tbody tr:hover{
 
 /* ===== ALERTA OBS ===== */
 .obs-alert{
-  color:#e60000;
   font-size:12px;
-  margin-right:4px; /* 🔥 espaço antes da pasta */
+  margin-right:4px;
 }
 
+.obs-alert.marcelo{
+    color:#ff6600;
+}
+
+.obs-alert.caua{
+    color:#0066ff;
+}
 /* ===== LOADING ===== */
 #loading{
   display:none;
