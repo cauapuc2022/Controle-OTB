@@ -123,7 +123,12 @@ if (ultimaMarcelo && ultimaCaua){
         dc[1].replace(":","");
 
     ultimaPessoa = valorMarcelo > valorCaua ? "marcelo" : "caua";
-      console.log({cliente: d.cliente,ultimaMarcelo,ultimaCaua,ultimaPessoa}); }   
+      console.log("Cliente:", d.cliente);
+      console.log("Último Marcelo:", ultimaMarcelo);
+      console.log("Último Cauã:", ultimaCaua);
+      console.log("Última pessoa:", ultimaPessoa);
+  
+  }   
       /* 🔥 FILTRO */
     if(filtroObsAtivo && !temObs) return;
 
