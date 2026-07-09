@@ -80,6 +80,44 @@ function render(){
 
     let temObs = (d.obs?.marcelo?.length || 0) > 0 || (d.obs?.caua?.length || 0) > 0;
 
+    // Descobre quem fez a última observação
+let ultimaPessoa = "";
+
+let ultimaMarcelo = d.obs?.marcelo?.length
+    ? d.obs.marcelo[d.obs.marcelo.length - 1]
+    : null;
+
+let ultimaCaua = d.obs?.caua?.length
+    ? d.obs.caua[d.obs.caua.length - 1]
+    : null;
+
+if (ultimaMarcelo && !ultimaCaua){
+    ultimaPessoa = "marcelo";
+}
+
+else if (ultimaCaua && !ultimaMarcelo){
+    ultimaPessoa = "caua";
+}
+
+
+if (ultimaMarcelo && ultimaCaua){
+
+    let dataMarcelo = ultimaMarcelo.data;
+    let dataCaua = ultimaCaua.data;
+
+    let dm = dataMarcelo.split(" ");
+    let dc = dataCaua.split(" ");
+
+    let valorMarcelo =
+        dm[0].split("/").reverse().join("") +
+        dm[1].replace(":","");
+
+    let valorCaua =
+        dc[0].split("/").reverse().join("") +
+        dc[1].replace(":","");
+
+    ultimaPessoa = valorMarcelo > valorCaua ? "marcelo" : "caua";
+}
     /* 🔥 FILTRO */
     if(filtroObsAtivo && !temObs) return;
 
@@ -97,7 +135,7 @@ function render(){
         <span class="cliente-nome">${d.cliente}</span>
 
          <span class="eye-icon" onclick="event.stopPropagation(); abrirObs(${i})">
-         ${temObs ? '<span class="obs-alert">❗</span>' : ''}
+         ${temObs ? `<span class="obs-alert ${ultimaPessoa}">❗</span>` : ''}
          📁</span>
        </td>
       <td>${d.diretos}</td>
